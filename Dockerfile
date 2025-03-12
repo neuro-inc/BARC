@@ -1,25 +1,12 @@
-
-FROM nvidia/cuda:11.8.0-devel-ubuntu22.04
-
-ENV DEBIAN_FRONTEND=noninteractive
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    git \
-    curl \
-    build-essential \
-    cmake \ 
-    python3-dev \
-    python3-pip \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3
-RUN pip3 install --no-cache-dir --upgrade pip setuptools wheel
+FROM nvcr.io/nvidia/pytorch:24.07-py3
 
 WORKDIR /app
 COPY . /app
 
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN MAX_JOBS=4 pip install flash-attn --no-build-isolation
 
-RUN pip3 install --no-cache-dir deepspeed wandb
+RUN pip install --no-cache-dir -r requirements.txt
+
+RUN cd /app/finetune/alignment-handbook/ && pip install .
 
 CMD ["/bin/bash"]

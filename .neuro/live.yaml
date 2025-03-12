@@ -39,7 +39,7 @@ jobs:
       - ${{ volumes.output.ref_rw }}
       - ${{ volumes.hf_cache.ref_rw }}
     # This job runs the supervised fine-tuning script for induction.
-    cmd: bash -c "cd /app && python -m finetune.alignment-handbook.scripts.run_sft.py recipes/barc/induction_config.yaml --load_in_4bit=false"
+    cmd: bash -c "cd /app/finetune/alignment-handbook && ACCELERATE_LOG_LEVEL=info accelerate launch --config_file recipes/accelerate_configs/deepspeed_zero3.yaml --num_processes=1 scripts/run_sft.py recipes/barc/config_fft_llama3_induction_all_data_mixed.yaml --load_in_4bit=false"
 
   barc_train_transduction:
     image: ${{ images.barc.ref }}
@@ -54,7 +54,7 @@ jobs:
       - ${{ volumes.output.ref_rw }}
       - ${{ volumes.hf_cache.ref_rw }}
     # This job runs the supervised fine-tuning script for transduction.
-    cmd: bash -c "cd /app && python -m finetune.alignment-handbook.scripts.run_sft.py recipes/barc/transduction_config.yaml --load_in_4bit=false"
+    cmd: bash -c "cd /app/finetune/alignment-handbook && ACCELERATE_LOG_LEVEL=info accelerate launch --config_file recipes/accelerate_configs/deepspeed_zero3.yaml --num_processes=1 scripts/run_sft.py recipes/barc/transduction_config_fft_engineer_heavy_model.yaml --load_in_4bit=false"
 
   barc_evaluate:
     image: ${{ images.barc.ref }}
