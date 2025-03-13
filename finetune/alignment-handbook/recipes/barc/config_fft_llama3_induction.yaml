@@ -52,8 +52,8 @@ lr_scheduler_type: cosine
 max_seq_length: 8192
 max_steps: -1
 num_train_epochs: 2
-hub_model_id: barc0/l3.1-8b-inst-fft-induction-barc-heavy-200k-lr1e-5-ep2
-output_dir: barc0/l3.1-8b-inst-fft-induction-barc-heavy-200k-lr1e-5-ep2
+hub_model_id: taddeusb90/l3.1-8b-inst-fft-induction-barc-heavy-200k-lr1e-5-ep2
+output_dir: taddeusb90/l3.1-8b-inst-fft-induction-barc-heavy-200k-lr1e-5-ep2
 overwrite_output_dir: true
 per_device_eval_batch_size: 16
 per_device_train_batch_size: 16

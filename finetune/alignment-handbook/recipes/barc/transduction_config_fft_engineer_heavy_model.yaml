@@ -28,7 +28,7 @@ gradient_accumulation_steps: 2
 gradient_checkpointing: true
 gradient_checkpointing_kwargs:
   use_reentrant: false
-hub_model_id: YourUsername/engineer-heavy-500k-barc-llama3.1-8b-ins-fft-transduction_lr1e-5_epoch3
+hub_model_id: taddeusb90/engineer-heavy-500k-barc-llama3.1-8b-ins-fft-transduction_lr1e-5_epoch3
 hub_strategy: every_save
 learning_rate: 1.0e-05
 log_level: info
@@ -38,7 +38,7 @@ lr_scheduler_type: cosine
 max_seq_length: 8192
 max_steps: -1
 num_train_epochs: 3
-output_dir: barc0/engineer-heavy-500k-barc-llama3.1-8b-ins-fft-transduction_lr1e-5_epoch3
+output_dir: taddeusb90/engineer-heavy-500k-barc-llama3.1-8b-ins-fft-transduction_lr1e-5_epoch3
 overwrite_output_dir: true
 per_device_eval_batch_size: 8
 per_device_train_batch_size: 8

@@ -23,6 +23,7 @@ import logging
 import random
 import sys
 import os
+import wandb
 
 import datasets
 import torch
@@ -53,6 +54,15 @@ os.environ["WANDB_PROJECT"] = "ARC"
 
 
 def main():
+
+
+
+    # Force each process to do wandb login:
+    wandb.login(
+        key=os.getenv("WANDB_API_KEY"),
+        relogin=True
+    )
+
     parser = H4ArgumentParser((ModelArguments, DataArguments, SFTConfig))
     model_args, data_args, training_args = parser.parse()
 
