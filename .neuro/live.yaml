@@ -29,49 +29,44 @@ jobs:
   barc_train_induction:
     image: ${{ images.barc.ref }}
     name: barc-train-induction
-    preset: H100X2
+    preset: H100x4
     detach: true
     env:
       HF_TOKEN: secret:HF_TOKEN
       WANDB_API_KEY: secret:WANDB_API_KEY
-      CUDA_VISIBLE_DEVICES: 0,1
+      CUDA_VISIBLE_DEVICES: 0,1,2,3
     volumes:
       - ${{ upload(volumes.data).ref_rw }}
       - ${{ volumes.output.ref_rw }}
       - ${{ volumes.hf_cache.ref_rw }}
     # This job runs the supervised fine-tuning script for induction.
-    cmd: bash -c "
-      echo 'Logging in to Weights & Biases...' &&
+    bash: |
       export WANDB_DOCKER=1 &&
+      wandb login $WANDB_API_KEY --relogin &&
+      echo 'Starting induction training...' &&
       cd /app/finetune/alignment-handbook &&
-      ACCELERATE_LOG_LEVEL=info accelerate launch --config_file recipes/accelerate_configs/deepspeed_zero3.yaml --num_processes=2 scripts/run_sft.py recipes/barc/config_fft_llama3_induction_all_data_mixed.yaml --load_in_4bit=false"
+      ACCELERATE_LOG_LEVEL=info accelerate launch --config_file recipes/accelerate_configs/deepspeed_zero3.yaml --num_processes=4 scripts/run_sft.py recipes/barc/config_fft_llama3_induction_all_data_mixed.yaml --load_in_4bit=false
 
   barc_train_transduction:
     image: ${{ images.barc.ref }}
     name: barc-train-transduction
-    preset: H100X1
+    preset: dgx
     detach: true
     env:
       HF_TOKEN: secret:HF_TOKEN
       WANDB_API_KEY: secret:WANDB_API_KEY
-      CUDA_VISIBLE_DEVICES: 0,1
+      CUDA_VISIBLE_DEVICES: 0,1,2,3,4,5,6,7
     volumes:
       - ${{ upload(volumes.data).ref_rw }}
       - ${{ volumes.output.ref_rw }}
       - ${{ volumes.hf_cache.ref_rw }}
     # This job runs the supervised fine-tuning script for transduction.
-    cmd: |
-      set -e
-      echo "Logging in to Weights & Biases..."
-      echo "WANDB_API_KEY=$WANDB_API_KEY"
-      wandb login "$WANDB_API_KEY" --relogin
-      cd /app/finetune/alignment-handbook
-      echo "Starting induction training..."
-      ACCELERATE_LOG_LEVEL=info accelerate launch \
-        --config_file recipes/accelerate_configs/deepspeed_zero3.yaml \
-        --num_processes=2 \
-        scripts/run_sft.py recipes/barc/config_fft_llama3_induction_all_data_mixed.yaml \
-        --load_in_4bit=false
+    cmd: bash -c "
+      export WANDB_DOCKER=1 &&
+      wandb login $WANDB_API_KEY --relogin &&
+      echo 'Starting induction training...' &&
+      cd /app/finetune/alignment-handbook &&
+      ACCELERATE_LOG_LEVEL=info accelerate launch --config_file recipes/accelerate_configs/deepspeed_zero3.yaml --num_processes=8 scripts/run_sft.py recipes/barc/transduction_config_fft_engineer_heavy_model.yaml --load_in_4bit=false"
 
   barc_evaluate:
     image: ${{ images.barc.ref }}
