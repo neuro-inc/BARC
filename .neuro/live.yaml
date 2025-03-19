@@ -86,3 +86,56 @@ jobs:
       echo 'Starting induction inference...' &&
       cd /app &&
       python finetune/inference/vllm_inference.py" # --model $MODEL_NAME --jsonl $DATA_FILE --output /app/output/induction_code_outputs.jsonl
+
+  barc_eval_induction:
+    image: ${{ images.barc.ref }}
+    name: barc-eval-induction
+    preset: cpu-large
+    detach: true
+    env:
+      HF_TOKEN: secret:HF_TOKEN
+      WANDB_API_KEY: secret:WANDB_API_KEY
+    volumes:
+      - ${{ upload(volumes.data).ref_rw }}
+      - ${{ volumes.output.ref_rw }}
+      - ${{ volumes.hf_cache.ref_rw }}
+    cmd: bash -c "
+      echo 'Evaluating induction code solutions...' &&
+      cd /app &&
+      python eval_code_samples.py --answer_file ./finetune/alignment-handbook/arc_problems_validation_400_extra_newline_v2_l3.1-8b-inst-fft-induction-barc-heavy-200k-old-200k-lr1e-5-ep3_temp_0.8_0319133621337110.jsonl"
+
+
+  barc_inference_transduction:
+    image: ${{ images.barc.ref }}
+    name: barc-inference-transduction
+    preset: H100x1
+    detach: true
+    env:
+      HF_TOKEN: secret:HF_TOKEN
+      WANDB_API_KEY: secret:WANDB_API_KEY
+    volumes:
+      - ${{ upload(volumes.data).ref_rw }}
+      - ${{ volumes.output.ref_rw }}
+      - ${{ volumes.hf_cache.ref_rw }}
+    cmd: bash -c "
+      wandb login $WANDB_API_KEY --relogin &&
+      echo 'Starting transduction inference...' &&
+      cd /app/finetune/inference &&
+      python vllm_inference_transduction_evaluation.py" # --model $MODEL_NAME --jsonl $DATA_FILE --output /app/output/transduction_predictions.jsonl"
+
+  barc_eval_ensembled:
+    image: ${{ images.barc.ref }}
+    name: barc-eval-ensembled
+    preset: cpu-large
+    detach: true
+    env:
+      HF_TOKEN: secret:HF_TOKEN
+      WANDB_API_KEY: secret:WANDB_API_KEY
+    volumes:
+      - ${{ upload(volumes.data).ref_rw }}
+      - ${{ volumes.output.ref_rw }}
+      - ${{ volumes.hf_cache.ref_rw }}
+    cmd: bash -c "
+      echo 'Evaluating transduction outputs...' &&
+      cd /app &&
+      python evaluation.py --jsonl /app/output/transduction_predictions.jsonl --metrics pass@1 pass@2"
