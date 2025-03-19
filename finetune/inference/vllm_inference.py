@@ -23,7 +23,7 @@ LORA_DIR = None
 
 BATCH_SIZE = 16
 num_of_samples_per_problem = 64
-TENSOR_PARALLEL = 1
+TENSOR_PARALLEL = 2
 
 
 from transformers import AutoTokenizer

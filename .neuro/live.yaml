@@ -68,22 +68,21 @@ jobs:
       cd /app/finetune/alignment-handbook &&
       ACCELERATE_LOG_LEVEL=info accelerate launch --config_file recipes/accelerate_configs/deepspeed_zero3.yaml --num_processes=8 scripts/run_sft.py recipes/barc/transduction_config_fft_engineer_heavy_model.yaml --load_in_4bit=false"
 
-  barc_evaluate:
+  barc_inference_induction:
     image: ${{ images.barc.ref }}
-    name: barc-evaluate
-    preset: a100x1
+    name: barc-inference-induction
+    preset: H100x1
     detach: true
     env:
       HF_TOKEN: secret:HF_TOKEN
       WANDB_API_KEY: secret:WANDB_API_KEY
+      CUDA_VISIBLE_DEVICES: 0
     volumes:
       - ${{ upload(volumes.data).ref_rw }}
       - ${{ volumes.output.ref_rw }}
       - ${{ volumes.hf_cache.ref_rw }}
-    # This job runs your evaluation script.
-    # Replace <your_model_identifier> with the finetuned model’s identifier and adjust the jsonl path as needed.
     cmd: bash -c "
-      export WANDB_API_KEY=${WANDB_API_KEY};
-      wandb login --relogin;
-      cd /app && 
-      python evaluation.py --model ft:<your_model_identifier> --jsonl /app/data/your_generated_problems.jsonl"
+      wandb login $WANDB_API_KEY --relogin &&
+      echo 'Starting induction inference...' &&
+      cd /app &&
+      python finetune/inference/vllm_inference.py" # --model $MODEL_NAME --jsonl $DATA_FILE --output /app/output/induction_code_outputs.jsonl
