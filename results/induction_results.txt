@@ -66,3 +66,5 @@ Accepted: 43/396
 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 396/396 [42:24<00:00,  6.43s/it]
 Accepted: 43/396
 Savings to results/arc_problems_validation_400_extra_newline_v2_l3.1-8b-inst-fft-induction-barc-heavy-200k-old-200k-lr1e-5-ep3_temp_0.8_0319133621337110_exec_results_v4.jsonl
+
+=> Accuracy: 10.858

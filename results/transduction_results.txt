@@ -11,3 +11,5 @@ Correct: 136/419
 INFO 03-19 22:05:06 multiproc_worker_utils.py:123] Killing local vLLM worker processes
 /home/taddeus/anaconda3/envs/barc/lib/python3.10/multiprocessing/resource_tracker.py:224: UserWarning: resource_tracker: There appear to be 1 leaked shared_memory objects to clean up at shutdown
   warnings.warn('resource_tracker: There appear to be %d '
+
+  => Accuracy: 32.458
