@@ -8,9 +8,12 @@ from arc import validation_problems
 # We provide the samples and execution results on Huggingface. Please check README.md to see the links.
 
 MAX_FILES_TO_LOAD = 10000 # Very large number to load all the files
-INDUCTION_SAMPLE_EXEC_RESULTS_DIRS_AND_SAMPLE_SIZE = [("induction_samples_with_execution_results/ARC-Potpourri/", 20000),
-                                                      ("induction_samples_with_execution_results/ARC-Potpourri-AugmentedPrompt/", 20000),]
-TRANSDUCTION_SAMPLE_FILE = "transduction_experimental_results/evaluation_dataset_results/Llama-3.1-ARC-Potpourri-Transduction-8B-test-time-finetune.jsonl"
+INDUCTION_SAMPLE_EXEC_RESULTS_DIRS_AND_SAMPLE_SIZE = [("data/barc0/induction_samples_with_execution_results/ARC-Potpourri/", 20000),
+                                                      ("data/barc0/induction_samples_with_execution_results/ARC-Potpourri-AugmentedPrompt/", 20000),]
+TRANSDUCTION_SAMPLE_FILE = "data/barc0/transduction_experimental_results/evaluation_dataset_results/Llama-3.1-ARC-Potpourri-Transduction-8B-test-time-finetune.jsonl"
+
+# INDUCTION_SAMPLE_EXEC_RESULTS_DIRS_AND_SAMPLE_SIZE = [("results/induction_results/", 20000)]
+# TRANSDUCTION_SAMPLE_FILE = "results/transduction_results/validation_transduction_prompt_engineer-heavy-500k-barc-llama3.1-8b-ins-fft-transduction_lr1e-5_epoch3_0319182829097422.jsonl"
 
 
 def grid_2d_to_tuple(grid):
