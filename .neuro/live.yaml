@@ -84,6 +84,7 @@ jobs:
     cmd: bash -c "
       wandb login $WANDB_API_KEY --relogin &&
       echo 'Starting induction inference...' &&
+      pip install vllm==0.6.0 &&
       cd /app &&
       python finetune/inference/vllm_inference.py" # --model $MODEL_NAME --jsonl $DATA_FILE --output /app/output/induction_code_outputs.jsonl
 
@@ -120,6 +121,7 @@ jobs:
     cmd: bash -c "
       wandb login $WANDB_API_KEY --relogin &&
       echo 'Starting transduction inference...' &&
+      pip install vllm==0.5.4 &&
       cd /app/finetune/inference &&
       python vllm_inference_transduction_evaluation.py" # --model $MODEL_NAME --jsonl $DATA_FILE --output /app/output/transduction_predictions.jsonl"
 
@@ -138,4 +140,4 @@ jobs:
     cmd: bash -c "
       echo 'Evaluating transduction outputs...' &&
       cd /app &&
-      python evaluation.py --jsonl /app/output/transduction_predictions.jsonl --metrics pass@1 pass@2"
+      python evaluation.py" #--jsonl /app/output/transduction_predictions.jsonl --metrics pass@1 pass@2"
