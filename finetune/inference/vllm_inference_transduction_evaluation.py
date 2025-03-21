@@ -1,6 +1,6 @@
 # BASE_MODEL = 'barc0/heavy-barc-llama3.1-8b-ins-fft-transduction_lr1e-5_epoch3'
 # BASE_MODEL = 'barc0/engineer1-heavy-barc-llama3.1-8b-ins-fft-transduction_lr1e-5_epoch3'
-BASE_MODEL = 'taddeusb90/engineer-heavy-500k-barc-llama3.1-8b-ins-fft-transduction_lr1e-5_epoch3'
+BASE_MODEL = 'apolo-mind/engineer-heavy-500k-barc-llama3.1-8b-ins-fft-transduction_lr1e-5_epoch3'
 
 LORA_DIR = None
 # LORA_DIR = 'barc0/heavy-barc-llama3.1-8b-instruct-lora64-testtime-finetuning'

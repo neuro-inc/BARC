@@ -27,7 +27,7 @@ dependencies:
       - absl-py==2.1.0
       - accelerate==1.5.2
       - airportsdata==20250224
-      - alignment-handbook==0.4.0.dev0
+      - git+https://github.com/huggingface/alignment-handbook.git@main
       - annotated-types==0.7.0
       - anyio==4.9.0
       - appdirs==1.4.4
