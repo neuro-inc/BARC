@@ -86,7 +86,7 @@ jobs:
       echo 'Starting induction inference...' &&
       pip install vllm==0.6.0 &&
       cd /app &&
-      python finetune/inference/vllm_inference.py" # --model $MODEL_NAME --jsonl $DATA_FILE --output /app/output/induction_code_outputs.jsonl
+      python finetune/inference/vllm_inference.py"
 
   barc_eval_induction:
     image: ${{ images.barc.ref }}
@@ -123,7 +123,7 @@ jobs:
       echo 'Starting transduction inference...' &&
       pip install vllm==0.5.4 &&
       cd /app/finetune/inference &&
-      python vllm_inference_transduction_evaluation.py" # --model $MODEL_NAME --jsonl $DATA_FILE --output /app/output/transduction_predictions.jsonl"
+      python vllm_inference_transduction_evaluation.py" 
 
   barc_eval_ensembled:
     image: ${{ images.barc.ref }}
@@ -140,4 +140,23 @@ jobs:
     cmd: bash -c "
       echo 'Evaluating transduction outputs...' &&
       cd /app &&
-      python evaluation.py" #--jsonl /app/output/transduction_predictions.jsonl --metrics pass@1 pass@2"
+      python evaluation.py" 
+
+  barc_jupyter_lab:
+    image: ${{ images.barc.ref }}
+    name: barc-jupyter-lab
+    preset: cpu-large
+    detach: true
+    env:
+      HF_TOKEN: secret:HF_TOKEN
+      WANDB_API_KEY: secret:WANDB_API_KEY
+    volumes:
+      - ${{ upload(volumes.data).ref_rw }}
+      - ${{ volumes.output.ref_rw }}
+      - ${{ volumes.hf_cache.ref_rw }}
+    ports:
+      - 8888:8888
+    cmd: bash -c "
+      pip install jupyterlab==4.0.2 &&
+      echo 'Starting Jupyter Lab...' &&
+      jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token=''"
