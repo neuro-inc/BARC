@@ -39,8 +39,8 @@ lr_scheduler_type: cosine
 max_seq_length: 8192
 max_steps: -1
 num_train_epochs: 3
-hub_model_id: apolo-mind/l3.1-8b-inst-fft-induction-barc-heavy-200k-old-200k-lr1e-5-ep3
-output_dir: apolo-mind/l3.1-8b-inst-fft-induction-barc-heavy-200k-old-200k-lr1e-5-ep3
+hub_model_id: apolo-mind/l3.1-8b-inst-fft-induction-barc-heavy-200k-old-200k-lr1e-5-ep3-test
+output_dir: apolo-mind/l3.1-8b-inst-fft-induction-barc-heavy-200k-old-200k-lr1e-5-ep3-test
 overwrite_output_dir: true
 per_device_eval_batch_size: 8
 per_device_train_batch_size: 16
