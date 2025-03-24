@@ -9,7 +9,7 @@ BATCH_SIZE = 20
 BEST_OF = 2
 
 # How many gpus you are using
-TENSOR_PARALLEL = 2
+TENSOR_PARALLEL = 1
 
 from transformers import AutoTokenizer
 if LORA_DIR:

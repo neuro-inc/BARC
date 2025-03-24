@@ -7,6 +7,7 @@ defaults:
 images:
   barc:
     ref: image:$[[ project.id ]]:v1
+    build_preset: cpu-8-20
     dockerfile: $[[ flow.workspace ]]/Dockerfile
     context: $[[ flow.workspace ]]/
   
@@ -103,7 +104,7 @@ jobs:
     cmd: bash -c "
       echo 'Evaluating induction code solutions...' &&
       cd /app &&
-      python eval_code_samples.py --answer_file ./finetune/alignment-handbook/arc_problems_validation_400_extra_newline_v2_l3.1-8b-inst-fft-induction-barc-heavy-200k-old-200k-lr1e-5-ep3_temp_0.8_0319133621337110.jsonl"
+      python eval_code_samples.py --answer_file ./results/arc_problems_validation_400_extra_newline_v2_l3.1-8b-inst-fft-induction-barc-heavy-200k-old-200k-lr1e-5-ep3_temp_0.8_0319133621337110.jsonl"
 
 
   barc_inference_transduction:
@@ -122,8 +123,8 @@ jobs:
       wandb login $WANDB_API_KEY --relogin &&
       echo 'Starting transduction inference...' &&
       pip install vllm==0.5.4 &&
-      cd /app/finetune/inference &&
-      python vllm_inference_transduction_evaluation.py" 
+      cd /app &&
+      python ./finetune/inference/vllm_inference_transduction_evaluation.py" 
 
   barc_eval_ensembled:
     image: ${{ images.barc.ref }}
@@ -145,7 +146,7 @@ jobs:
   barc_jupyter_lab:
     image: ${{ images.barc.ref }}
     name: barc-jupyter-lab
-    preset: cpu-large
+    preset: H100x1
     detach: true
     env:
       HF_TOKEN: secret:HF_TOKEN
@@ -154,9 +155,7 @@ jobs:
       - ${{ upload(volumes.data).ref_rw }}
       - ${{ volumes.output.ref_rw }}
       - ${{ volumes.hf_cache.ref_rw }}
-    ports:
-      - 8888:8888
+    http_port: 8888
     cmd: bash -c "
-      pip install jupyterlab==4.0.2 &&
       echo 'Starting Jupyter Lab...' &&
       jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token=''"
